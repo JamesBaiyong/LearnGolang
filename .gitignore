@@ -1,0 +1,10 @@
+*.pyc
+.idea
+.vscode
+*.log
+*.log.*
+data/
+*.tar.gz
+test/
+
+
