@@ -43,3 +43,70 @@ func main() {
 
 1. `switch` 是编写一连串 `if - else` 语句的简便方法。它运行第一个值等于条件表达式的 case 语句。且Go 只运行选定的 case，而非之后所有的 case。 实际上，Go 自动提供了在这些语言中每个 case 后面所需的 `break` 语句。
 2. 除非以 `fallthrough` 语句结束，否则分支会自动终止。 Go 的另一点重要的不同在于 switch 的 case 无需为常量，且取值不必为整数。
+3. 无条件的switch,这种形式能将一长串 "if-then-else" 写得更加清晰。
+
+```go
+package main
+
+import "fmt"
+
+func main(){
+  switch parm := 1
+  parm {
+    case 1:
+    	fmt.Println(123)
+    case 2:
+    	fmt.Println(321)
+    default:
+    	fmt.Println('h31l0')
+  }
+}
+```
+
+###### defer语句
+
+1. defer 语句会将函数推迟到外层函数返回之后执行,推迟调用的函数其参数会立即求值，但直到外层函数返回前该函数都不会被调用。
+2. defer后的函数或语句调用会被压入一个栈中。 当外层函数返回时，被推迟的函数会按照后进先出的顺序调用。也就是说，一个函数中，defer先近后出。
+
+```go
+package main
+
+import (
+	"fmt"
+)
+
+func defer_test() {
+	fmt.Println("World")
+}
+
+func main() {
+	defer fmt.Println("done")
+	fmt.Println("Hello")
+	fmt.Println("倒计时...")
+	for i:=0;i<=10; i++{
+		defer fmt.Println(i)
+	}
+	fmt.Println("go...")
+	defer_test()
+}
+
+/*out:
+Hello
+倒计时...
+go...
+World
+10
+9
+8
+7
+6
+5
+4
+3
+2
+1
+0
+done
+*/
+```
+
