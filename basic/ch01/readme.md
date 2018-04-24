@@ -24,4 +24,34 @@
 
 11. Go 在不同类型的项之间赋值时需要显式转换，如　f float64 = math.Sqrt(float64(x\*x + y\*y))
 
+12. import 三种方式：
 
+    > 1 点操作
+    >
+    > ```go
+    > import (
+    > 	.'fmt'
+    > )
+    > // 表示在调用这个包的函数时，可以省略包名前缀,fmt.Println可以写成Println
+    > ```
+    >
+    > 2 别名操作 
+    >
+    > ```go
+    > import (
+    > 	f "fmt"
+    > )
+    > // 使用别名代替保名
+    > ```
+    >
+    > 3 _操作
+    >
+    > ```go
+    > import	(
+    >   "database/sql"
+    > 	_	"github.com/ziutek/mymysql/godrv"
+    > )
+    > //表示引入该包，不直接使用包里的函数，而是调用init函数
+    > ```
+    >
+    > ​
