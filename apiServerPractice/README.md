@@ -1,10 +1,13 @@
-###### api 练习项目一阶段
+#### api 练习项目一阶段
 
 使用Gin框架
 
 * 效果
 
-  访问对应的路由可以查看系统cpu,disk,ram占用情况
+  1. 访问对应的路由可以查看系统cpu,disk,ram占用情况
+
+
+  2. 通过读取配置文件来配置运行情况
 
 
 * 包依赖:
@@ -43,4 +46,18 @@ git clone https://github.com/lexkong/vendor
   格式化字符串,不输出
   ```
 
-  ​
+* 用到的库文件
+
+  > viper
+
+```shell
+Viper 配置读取顺序：
+
+viper.Set() 所设置的值
+命令行 flag
+环境变量
+配置文件
+配置中心：etcd/consul
+默认值
+```
+

@@ -1,20 +1,27 @@
 package main
 
 import (
+	"errors"
+	"log"
 	"net/http"
 	"time"
-	"log"
-	"errors"
 
-	"github.com/gin-gonic/gin"
+	"LearnGolang/apiServerPractice/config"
 	"LearnGolang/apiServerPractice/router"
+	"github.com/gin-gonic/gin"
+	"github.com/spf13/pflag"
+	"github.com/spf13/viper"
+)
+
+var (
+	cfg = pflag.StringP("config", "c", "", "apiServerPractice config file path")
 )
 
 // png server 确保服务启动正常
 func pingServer() error {
-	for i := 0; i < 2; i++ {
+	for i := 0; i < viper.GetInt("max_ping_count"); i++ {
 		// ping.
-		resp, err := http.Get("http://127.0.0.1:8080" + "/sd/health")
+		resp, err := http.Get(viper.GetString("url") + "/sd/health")
 		if err == nil && resp.StatusCode == 200 {
 			return nil
 		}
@@ -26,19 +33,26 @@ func pingServer() error {
 	return errors.New("Cannot connect to the router.")
 }
 
+func main() {
+	pflag.Parse()
+	if err := config.Init(*cfg); err != nil {
+		panic(err)
+	}
 
-func main(){
+
+	gin.SetMode(viper.GetString("runmode"))
+
 	g := gin.New()
 	middleware := []gin.HandlerFunc{}
 	//路由加载
-	router.Load(g,middleware...)
+	router.Load(g, middleware...)
 	go func() {
 		if err := pingServer(); err != nil {
-		log.Fatal("The router has no response, or it might took too long to start up.", err)
-	}
+			log.Fatal("The router has no response, or it might took too long to start up.", err)
+		}
 		log.Print("The router has been deployed successfully.")
 	}()
-	log.Printf("Start to listening the incoming requests on http address: %s", ":8080")
-	log.Printf(http.ListenAndServe(":8080", g).Error())
+	log.Printf("Start to listening the incoming requests on http address: %s", viper.GetString("addr"))
+	log.Printf(http.ListenAndServe(viper.GetString("addr"), g).Error())
 
-	}
+}
