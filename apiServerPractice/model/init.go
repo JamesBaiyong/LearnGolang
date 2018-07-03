@@ -4,55 +4,54 @@ import (
 	"fmt"
 
 	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"github.com/lexkong/log"
 	"github.com/spf13/viper"
-	_"github.com/jinzhu/gorm/dialects/mysql"
 )
 
 type Database struct {
-	Self	*gorm.DB
+	Self *gorm.DB
 }
 
 var DB *Database
 
-
-func (db *Database) Init()  {
+func (db *Database) Init() {
 	DB = &Database{
-		Self:	GetSelfDB(),
+		Self: GetSelfDB(),
 	}
 }
 
-func (db *Database) Close()  {
+func (db *Database) Close() {
 	DB.Self.Close()
 }
 
 //数据库链接
-func openDB(username,password,addr,name string) *gorm.DB  {
+func openDB(username, password, addr, name string) *gorm.DB {
 	confg := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8&parseTime=%t&loc=%s",
-			username,
-			password,
-			addr,
-			name,
-			true,
-			"Local",
-		)
+		username,
+		password,
+		addr,
+		name,
+		true,
+		"Local",
+	)
 	db, err := gorm.Open("mysql", confg)
 	if err != nil {
-		log.Errorf(err,"Database connection failed. Database name: %s", name)
+		log.Errorf(err, "Database connection failed. Database name: %s", name)
 	}
 	setupDB(db)
 	return db
 }
 
 //设置数据库链接相关
-func setupDB(db *gorm.DB){
+func setupDB(db *gorm.DB) {
 	db.LogMode(viper.GetBool("gormlog"))
 	db.DB().SetMaxOpenConns(2000) //用于设置最大打开的连接数，默认值为0表示不限制.设置最大的连接数，避免并发太高导致连接mysql出现too many connections的错误。
-	db.DB().SetMaxIdleConns(0) //用于设置闲置的连接数.设置闲置的连接数则当开启的一个连接使用完成后可以放在池里等候下一次使用。
+	db.DB().SetMaxIdleConns(0)    //用于设置闲置的连接数.设置闲置的连接数则当开启的一个连接使用完成后可以放在池里等候下一次使用。
 }
 
 // used for cli
-func InitSelfDB() *gorm.DB{
+func InitSelfDB() *gorm.DB {
 	return openDB(
 		viper.GetString("db.username"),
 		viper.GetString("db.password"),
@@ -61,6 +60,6 @@ func InitSelfDB() *gorm.DB{
 	)
 }
 
-func GetSelfDB() *gorm.DB{
+func GetSelfDB() *gorm.DB {
 	return InitSelfDB()
 }

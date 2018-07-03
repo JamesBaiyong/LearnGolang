@@ -6,12 +6,12 @@ import (
 	"time"
 
 	"LearnGolang/apiServerPractice/config"
-	"LearnGolang/apiServerPractice/router"
 	"LearnGolang/apiServerPractice/model"
+	"LearnGolang/apiServerPractice/router"
 	"github.com/gin-gonic/gin"
+	"github.com/lexkong/log"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
-	"github.com/lexkong/log"
 )
 
 var (

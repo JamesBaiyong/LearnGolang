@@ -4,8 +4,8 @@ import (
 	"strings"
 
 	"github.com/fsnotify/fsnotify"
-	"github.com/spf13/viper"
 	"github.com/lexkong/log"
+	"github.com/spf13/viper"
 )
 
 type Config struct {
@@ -35,7 +35,7 @@ func (c *Config) initConfig() error {
 	}
 	viper.SetConfigType("yaml")
 	viper.AutomaticEnv()
-	viper.SetEnvPrefix("APISERVER")  //设置从环境变量读配置文件的前缀:"export APISERVER_ADDR=:7777 export APISERVER_URL=http://127.0.0.1:7777"
+	viper.SetEnvPrefix("APISERVER") //设置从环境变量读配置文件的前缀:"export APISERVER_ADDR=:7777 export APISERVER_URL=http://127.0.0.1:7777"
 	replacer := strings.NewReplacer(".", "-")
 	viper.SetEnvKeyReplacer(replacer)
 	if err := viper.ReadInConfig(); err != nil {

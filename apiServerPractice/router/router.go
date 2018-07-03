@@ -2,6 +2,7 @@ package router
 
 import (
 	"LearnGolang/apiServerPractice/handler/sd"
+	"LearnGolang/apiServerPractice/handler/user"
 	"LearnGolang/apiServerPractice/router/middleware"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -18,6 +19,11 @@ func Load(router *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 	router.NoRoute(func(c *gin.Context) {
 		c.String(http.StatusNotFound, "Error API path.")
 	})
+
+	u := router.Group("/v1/user")
+	{
+		u.POST("", user.CreateUser)
+	}
 
 	r1 := router.Group("/sd")
 	{
