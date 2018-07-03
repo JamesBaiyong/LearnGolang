@@ -7,6 +7,7 @@ import (
 
 	"LearnGolang/apiServerPractice/config"
 	"LearnGolang/apiServerPractice/router"
+	"LearnGolang/apiServerPractice/model"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
@@ -35,11 +36,16 @@ func pingServer() error {
 
 func main() {
 	pflag.Parse()
+	//加载配置文件
 	if err := config.Init(*cfg); err != nil {
 		panic(err)
 	}
 
+	//链接数据库
+	model.DB.Init()
+	defer model.DB.Close()
 
+	//设置gin运行模式
 	gin.SetMode(viper.GetString("runmode"))
 
 	// 测试日志打印并保存

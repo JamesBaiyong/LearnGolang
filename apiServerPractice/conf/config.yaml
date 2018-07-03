@@ -12,3 +12,8 @@ log:
   log_rotate_date: 1 #单位为天配合rollingPolicy:daily使用
   log_rotate_size: 1 # 单位为MB配合rollingPolicy: size使用
   log_backup_count: 7 # 日志备份保存的份数
+db:
+  name: db_apiserver
+  addr: 127.0.0.1:3306
+  username: cat
+  password: catpass

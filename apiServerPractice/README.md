@@ -7,6 +7,7 @@
   1. 访问对应的路由可以查看系统cpu,disk,ram占用情况
   2. 通过读取配置文件来配置运行情况
   3. 增加日志输出和保存到文件,并设置日志单个大小,备份文件个数(日志配置使用第三方日志包)
+  4. 链接mysql数据库,从配置文件读取数据库相关链接信息
 * 包依赖:
 
 ```ssh
@@ -57,5 +58,28 @@ viper.Set() 所设置的值
 配置中心：etcd/consul
 默认值
 ```
+
+	>Go ORM
+
+```go
+import (
+  "github.com/jinzhu/gorm"
+  _"github.com/jinzhu/gorm/dialects/mysql"
+)
+db, err := gorm.Open("mysql", config) //链接数据库
+defer db.Close() //关闭数据库链接,Close()数据库对象调用即可
+.....
+....
+
+//设置数据库链接相关
+func setupDB(db *gorm.DB){
+	db.LogMode(viper.GetBool("gormlog"))
+	db.DB().SetMaxOpenConns(2000) //用于设置最大打开的连接数，默认值为0表示不限制.设置最大的连接数，避免并发太高导致连接mysql出现too many connections的错误。
+	db.DB().SetMaxIdleConns(0) //用于设置闲置的连接数.设置闲置的连接数则当开启的一个连接使用完成后可以放在池里等候下一次使用。
+}
+
+```
+
+
 
 * 日志说明见配置文件
