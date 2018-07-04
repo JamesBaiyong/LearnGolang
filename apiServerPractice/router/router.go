@@ -22,7 +22,7 @@ func Load(router *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 
 	u := router.Group("/v1/user")
 	{
-		u.POST("", user.CreateUser)
+		u.POST("/:username", user.CreateUser)
 	}
 
 	r1 := router.Group("/sd")
