@@ -9,6 +9,7 @@
   3. 增加日志输出和保存到文件,并设置日志单个大小,备份文件个数(日志配置使用第三方日志包)
   4. 链接mysql数据库,从配置文件读取数据库相关链接信息
   5. 自定义业务错误信息
+  6. 读取和返回HTTP请求
 * 包依赖:
 
 ```ssh
@@ -80,6 +81,33 @@ func setupDB(db *gorm.DB){
 	db.DB().SetMaxIdleConns(0) //用于设置闲置的连接数.设置闲置的连接数则当开启的一个连接使用完成后可以放在池里等候下一次使用。
 }
 
+```
+
+> Gin
+
+```go
+// Param()：返回 URL 的参数值，例如
+ router.GET("/user/:id", func(c *gin.Context) {
+  // a GET request to /user/john
+     id := c.Param("id") // id == "john"
+ })
+
+//Query()：读取 URL 中的地址参数，例如
+// GET /path?id=1234&name=Manu&value=
+   c.Query("id") == "1234"
+   c.Query("name") == "Manu"
+   c.Query("value") == ""
+   c.Query("wtf") == ""  
+
+//DefaultQuery()：类似 Query()，但是如果 key 不存在，会返回默认值，例如
+ //GET /?name=Manu&lastname=
+ c.DefaultQuery("name", "unknown") == "Manu"
+ c.DefaultQuery("id", "none") == "none"
+ c.DefaultQuery("lastname", "none") == ""
+
+//Bind()：检查 Content-Type 类型，将消息体作为指定的格式解析到 Go struct 变量中。apiserver 采用的媒体类型是 JSON，所以 Bind() 是按 JSON 格式解析的。
+
+//GetHeader()：获取 HTTP 头。
 ```
 
 
